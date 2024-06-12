@@ -4,22 +4,31 @@ import android.util.Log;
 
 import com.example.usb.ptp.commands.eos.EosEventCheckCommand;
 import com.example.usb.ptp.commands.eos.EosOpenSessionAction;
+import com.example.usb.ptp.commands.sony.SonyEventCheckCommand;
+import com.example.usb.ptp.commands.sony.SonyOpenSessionAction;
 
 import java.util.Set;
 
-public class EosCamera extends PtpCamera {
-    public EosCamera(PtpUsbConnection connection, CameraListener listener) {
+/**
+ * 索尼相机对象
+ */
+public class SonyCamera extends PtpCamera {
+    public SonyCamera(PtpUsbConnection connection, CameraListener listener) {
         super(connection, listener);
+    }
+
+    public void onEventDirItemCreated(int objectHandle, int storageId, int objectFormat, String filename) {
+        onEventObjectAdded(objectHandle);
     }
 
     @Override
     protected void openSession() {
-        queue.add(new EosOpenSessionAction(this));
+        queue.add(new SonyOpenSessionAction(this));
     }
 
     @Override
     protected void queueEventCheck() {
-        queue.add(new EosEventCheckCommand(this));
+        queue.add(new SonyEventCheckCommand(this));
     }
 
     @Override
@@ -42,9 +51,5 @@ public class EosCamera extends PtpCamera {
             }
         }
         return false;
-    }
-
-    public void onEventDirItemCreated(int objectHandle, int storageId, int objectFormat, String filename) {
-        onEventObjectAdded(objectHandle);
     }
 }

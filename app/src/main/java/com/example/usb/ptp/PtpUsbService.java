@@ -177,27 +177,37 @@ public class PtpUsbService implements PtpService,
                         device
                 );
                 mCamera = new NikonCamera(connection, this);
-            } else {
+            } else if (device.getVendorId() == PtpConstants.SonyVendorId) {
                 // 索尼只是做测试，未投入使用
-                if (device.getVendorId() == PtpConstants.SonyVendorId) {
-                    PtpUsbConnection connection = new PtpUsbConnection(
-                            usbManager.openDevice(device),
-                            in,
-                            out,
-                            device.getVendorId(),
-                            device.getProductId(),
-                            device
-                    );
-                    mCamera = new PtpCamera(connection, this) {
-                        @Override
-                        protected void onOperationCodesReceived(Set<Integer> operations) {
-                        }
+                Log.i(TAG, "获取到sony设备" + device.getVendorId());
+                PtpUsbConnection connection = new PtpUsbConnection(
+                        usbManager.openDevice(device),
+                        in,
+                        out,
+                        device.getVendorId(),
+                        device.getProductId(),
+                        device
+                );
+                mCamera = new SonyCamera(connection, this);
+            } else {
+                //其他设备
+                PtpUsbConnection connection = new PtpUsbConnection(
+                        usbManager.openDevice(device),
+                        in,
+                        out,
+                        device.getVendorId(),
+                        device.getProductId(),
+                        device
+                );
+                mCamera = new PtpCamera(connection, this) {
+                    @Override
+                    protected void onOperationCodesReceived(Set<Integer> operations) {
+                    }
 
-                        @Override
-                        protected void queueEventCheck() {
-                        }
-                    };
-                }
+                    @Override
+                    protected void queueEventCheck() {
+                    }
+                };
                 Log.e(TAG, "不支持的设备id" + device.getVendorId());
             }
             return true;

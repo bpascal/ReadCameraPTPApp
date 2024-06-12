@@ -15,6 +15,16 @@ public class NikonCamera extends PtpCamera {
     }
 
     @Override
+    protected void openSession() {
+        queue.add(new NikonOpenSessionAction(this));
+    }
+
+    @Override
+    protected void queueEventCheck() {
+        queue.add(new NikonEventCheckCommand(this));
+    }
+
+    @Override
     protected void onOperationCodesReceived(Set<Integer> operations) {
         if (AppConfig.LOG) {
             for (int i = 0; i < deviceInfo.operationsSupported.length; ++i) {
@@ -34,16 +44,6 @@ public class NikonCamera extends PtpCamera {
                 Log.e("PtpUsbService", String.format("vendorPropCodes: 0x%x", vendorPropCodes[i]));
             }
         }
-    }
-
-    @Override
-    protected void openSession() {
-        queue.add(new NikonOpenSessionAction(this));
-    }
-
-    @Override
-    protected void queueEventCheck() {
-        queue.add(new NikonEventCheckCommand(this));
     }
 
     public boolean hasSupport(int oc) {
