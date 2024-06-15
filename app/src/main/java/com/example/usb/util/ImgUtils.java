@@ -27,7 +27,7 @@ public class ImgUtils {
 
 
     /**
-     * @param 将图片内容解析成字节数组
+     * 将图片内容解析成字节数组
      * @param inStream
      * @return byte[]
      * @throws Exception
@@ -46,19 +46,20 @@ public class ImgUtils {
 
     }
     /**
-     * @param 将字节数组转换为ImageView可调用的Bitmap对象
+     * 将字节数组转换为ImageView可调用的Bitmap对象
      * @param bytes
      * @param opts
      * @return Bitmap
      */
     public static Bitmap getPicFromBytes(byte[] bytes,
                                          BitmapFactory.Options opts) {
-        if (bytes != null)
-            if (opts != null)
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length,
-                        opts);
-            else
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        if (bytes != null) {
+			if (opts != null) {
+				return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+			} else {
+				return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+			}
+		}
         return null;
     }
     /**
